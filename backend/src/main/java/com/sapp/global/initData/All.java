@@ -3,6 +3,7 @@ package com.sapp.global.initData;
 import com.sapp.domain.member.member.entity.Member;
 import com.sapp.domain.member.member.service.MemberService;
 import com.sapp.domain.post.post.service.PostService;
+import com.sapp.global.app.AppConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -33,10 +34,19 @@ public class All {
         if (memberService.count() > 0) return;
 
         Member memberSystem = memberService.join("system", "1234", "시스템");
+        if (AppConfig.isNotProd()) memberSystem.setRefreshToken("system");
+
         Member memberAdmin = memberService.join("admin", "1234", "관리자");
+        if (AppConfig.isNotProd()) memberAdmin.setRefreshToken("admin");
+
         Member memberUser1 = memberService.join("user1", "1234", "유저1");
+        if (AppConfig.isNotProd()) memberUser1.setRefreshToken("user1");
+
         Member memberUser2 = memberService.join("user2", "1234", "유저2");
+        if (AppConfig.isNotProd()) memberUser2.setRefreshToken("user2");
+
         Member memberUser3 = memberService.join("user3", "1234", "유저3");
+        if (AppConfig.isNotProd()) memberUser3.setRefreshToken("user3");
 
         if (postService.count() > 0) return;
 

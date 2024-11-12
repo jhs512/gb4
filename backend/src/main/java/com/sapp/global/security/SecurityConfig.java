@@ -21,12 +21,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/**")
                 .authorizeRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}", "/api/*/posts")
                                 .permitAll()
-                                .requestMatchers("/api/*/members/login", "/api/*/members/logout")
+                                .requestMatchers(HttpMethod.POST, "/api/*/members/login", "/api/*/members/logout")
+                                .permitAll()
+                                .requestMatchers("/h2-console/**")
+                                .permitAll()
+                                .requestMatchers("/actuator/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

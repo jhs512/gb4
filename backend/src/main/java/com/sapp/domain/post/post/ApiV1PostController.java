@@ -9,10 +9,14 @@ import com.sapp.global.rq.Rq;
 import com.sapp.global.rsData.RsData;
 import com.sapp.standard.base.Empty.Empty;
 import com.sapp.standard.base.KwTypeV1;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +31,9 @@ import java.util.List;
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "ApiV1PostController", description = "POST API 컨트롤러")
 public class ApiV1PostController {
     private final PostService postService;
     private final Rq rq;
@@ -44,6 +51,7 @@ public class ApiV1PostController {
     }
 
     @GetMapping
+    @Operation(summary = "다건 조회")
     public Page<PostDto> getItems(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String kw,
@@ -62,6 +70,7 @@ public class ApiV1PostController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "단건 조회")
     public PostDto getItem(
             @PathVariable long id
     ) {
@@ -79,6 +88,7 @@ public class ApiV1PostController {
     // 처리
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(summary = "삭제")
     public RsData<Empty> deleteItem(
             @PathVariable long id
     ) {
@@ -104,6 +114,7 @@ public class ApiV1PostController {
 
     @PutMapping("/{id}")
     @Transactional
+    @Operation(summary = "수정")
     public PostDto modifyItem(
             @PathVariable long id,
             @Valid @RequestBody PostModifyItemReqBody reqBody
@@ -130,6 +141,7 @@ public class ApiV1PostController {
 
     @PostMapping
     @Transactional
+    @Operation(summary = "작성")
     public Post writeItem(
             @Valid @RequestBody PostWriteItemReqBody reqBody
     ) {
