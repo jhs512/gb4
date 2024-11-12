@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
+
 @RestController
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
@@ -57,6 +59,7 @@ public class ApiV1MemberController {
     }
 
     @PostMapping("/logout")
+    @Transactional(propagation = NOT_SUPPORTED)
     public RsData<Empty> logout() {
         rq.clearAuthCookies();
 

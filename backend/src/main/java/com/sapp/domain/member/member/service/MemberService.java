@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -84,6 +86,7 @@ public class MemberService {
         );
     }
 
+    @Transactional(propagation = NOT_SUPPORTED)
     public SecurityUser getUserFromAccessToken(String accessToken) {
         Map<String, Object> payloadBody = authTokenService.getDataFrom(accessToken);
 
@@ -99,10 +102,12 @@ public class MemberService {
         );
     }
 
+    @Transactional(propagation = NOT_SUPPORTED)
     public boolean validateToken(String token) {
         return authTokenService.validateToken(token);
     }
 
+    @Transactional(propagation = NOT_SUPPORTED)
     public RsData<String> refreshAccessToken(String refreshToken) {
         Member member = memberRepository.findByRefreshToken(refreshToken).get();
 
