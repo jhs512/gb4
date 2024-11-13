@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${pretendard.variable}`}>
-      <body className={pretendard.className}>
+      <body className={`${pretendard.className} flex flex-col min-h-screen`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
