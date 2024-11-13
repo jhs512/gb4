@@ -21,6 +21,7 @@ export function useLoginMember() {
 
   const removeLoginMember = () => {
     _setLoginMember(createEmptyMember());
+    setLoginMemberPending(false);
   };
 
   const isLogin = loginMember.id !== 0;

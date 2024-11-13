@@ -2,10 +2,24 @@
 
 import client from "@/lib/openapi_fetch";
 import { useLoginMember } from "@/stores/member";
+import { useEffect } from "react";
 
 export default function ClientPage() {
-  const { setLoginMember, isLogin, loginMember, isLoginMemberPending } =
-    useLoginMember();
+  const {
+    setLoginMember,
+    isLogin,
+    loginMember,
+    isLoginMemberPending,
+    removeLoginMember,
+  } = useLoginMember();
+
+  useEffect(() => {
+    client.GET("/api/v1/members/me").then(({ data }) => {
+      if (data) {
+        setLoginMember(data.data);
+      }
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +42,16 @@ export default function ClientPage() {
     }
   };
 
+  const logout = () => {
+    client.POST("/api/v1/members/logout").then(({ error }) => {
+      if (error) {
+        alert(error.msg);
+      } else {
+        removeLoginMember();
+      }
+    });
+  };
+
   return (
     <>
       {isLoginMemberPending && <div>로그인 정보가 아직 세팅되지 않음</div>}
@@ -42,6 +66,8 @@ export default function ClientPage() {
             />
           </div>
           <div>{loginMember.name}</div>
+
+          <button onClick={logout}>로그아웃</button>
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
