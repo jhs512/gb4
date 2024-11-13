@@ -1,6 +1,7 @@
 import client from "@/lib/openapi_fetch";
 import ClientPage from "./ClientPage";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "",
@@ -15,6 +16,9 @@ export default async function Page({ params }: { params: { id: string } }) {
       path: {
         id: parseInt(id),
       },
+    },
+    headers: {
+      cookie: (await cookies()).toString(),
     },
   });
 
