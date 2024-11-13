@@ -6,9 +6,7 @@ import lombok.SneakyThrows;
 import org.apache.tika.Tika;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -24,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class Ut {
     public static class str {
@@ -54,10 +51,24 @@ public class Ut {
 
         public static void run(String cmd) {
             try {
-                ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", cmd);
-                Process process = processBuilder.start();
-                process.waitFor(1, TimeUnit.MINUTES);
+                Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+                process.waitFor();
+
+                String line;
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                System.out.println("cmd: " + cmd);
+                System.out.println("=== output start ===");
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    System.out.println(line);
+                }
+
+                System.out.println("=== output end ===");
+
+                bufferedReader.close();
             } catch (Exception e) {
+                System.out.println("failed cmd: " + cmd);
                 e.printStackTrace();
             }
         }
@@ -102,6 +113,11 @@ public class Ut {
 
         public static String encode(String url) {
             return URLEncoder.encode(url, StandardCharsets.UTF_8);
+        }
+
+        public static void download(String url, String destFilePath) {
+            // download by http
+            String filePath = Ut.file.downloadFileByHttp(url, destFilePath);
         }
     }
 
@@ -256,6 +272,8 @@ public class Ut {
                 if (ext == null || ext.isEmpty()) {
                     throw new DownloadFileFailException();
                 }
+
+                ext = ext.replaceAll("/", "_");
 
                 String newFilePath = filePath.replace(".tmp", "." + ext);
                 moveFile(filePath, newFilePath);

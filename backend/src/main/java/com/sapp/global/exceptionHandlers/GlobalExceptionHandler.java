@@ -3,7 +3,7 @@ package com.sapp.global.exceptionHandlers;
 import com.sapp.global.exceptions.GlobalException;
 import com.sapp.global.rq.Rq;
 import com.sapp.global.rsData.RsData;
-import com.sapp.standard.base.Empty.Empty;
+import com.sapp.standard.base.Empty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

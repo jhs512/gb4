@@ -7,8 +7,9 @@ import com.sapp.domain.post.post.service.PostService;
 import com.sapp.global.app.AppConfig;
 import com.sapp.global.rq.Rq;
 import com.sapp.global.rsData.RsData;
-import com.sapp.standard.base.Empty.Empty;
+import com.sapp.standard.base.Empty;
 import com.sapp.standard.base.KwTypeV1;
+import com.sapp.standard.base.PageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,7 +53,7 @@ public class ApiV1PostController {
 
     @GetMapping
     @Operation(summary = "다건 조회")
-    public Page<PostDto> getItems(
+    public PageDto<PostDto> getItems(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String kw,
             @RequestParam(defaultValue = "ALL") KwTypeV1 kwType
@@ -64,9 +65,9 @@ public class ApiV1PostController {
 
         Member actor = rq.getMember();
 
-        Page<PostDto> postDtos = itemPage.map(post -> toPostDto(actor, post));
-
-        return postDtos;
+        return new PageDto(
+                itemPage.map(post -> toPostDto(actor, post))
+        );
     }
 
     @GetMapping("/{id}")
@@ -115,7 +116,7 @@ public class ApiV1PostController {
     @PutMapping("/{id}")
     @Transactional
     @Operation(summary = "수정")
-    public PostDto modifyItem(
+    public RsData<PostDto> modifyItem(
             @PathVariable long id,
             @Valid @RequestBody PostModifyItemReqBody reqBody
     ) {
@@ -127,7 +128,7 @@ public class ApiV1PostController {
 
         postService.modify(post, reqBody.title, reqBody.body, reqBody.published, reqBody.listed);
 
-        return toPostDto(actor, post);
+        return RsData.of("%d번 글이 수정되었습니다.".formatted(id), toPostDto(actor, post));
     }
 
 
@@ -142,11 +143,13 @@ public class ApiV1PostController {
     @PostMapping
     @Transactional
     @Operation(summary = "작성")
-    public Post writeItem(
+    public RsData<PostDto> writeItem(
             @Valid @RequestBody PostWriteItemReqBody reqBody
     ) {
         Member author = rq.getMember();
 
-        return postService.write(author, reqBody.title, reqBody.body, reqBody.published, reqBody.listed);
+        Post post = postService.write(author, reqBody.title, reqBody.body, reqBody.published, reqBody.listed);
+
+        return RsData.of("%d번 글이 생성되었습니다.".formatted(post.getId()), toPostDto(author, post));
     }
 }

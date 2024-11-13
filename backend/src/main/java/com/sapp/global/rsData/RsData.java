@@ -1,10 +1,11 @@
 package com.sapp.global.rsData;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sapp.standard.base.Empty.Empty;
+import com.sapp.standard.base.Empty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -12,9 +13,13 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 @Getter
 public class RsData<T> {
+    @NonNull
     String resultCode;
+    @NonNull
     int statusCode;
+    @NonNull
     String msg;
+    @NonNull
     T data;
 
     public static RsData<Empty> of(String msg) {

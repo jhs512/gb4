@@ -14,13 +14,20 @@ import org.springframework.core.annotation.Order;
 @RequiredArgsConstructor
 public class Dev {
     @Bean
-    @Order(5)
+    @Order
     ApplicationRunner initDev() {
         return args -> {
             String backUrl = AppConfig.getSiteBackUrl();
-            Ut.cmd.run("curl -o apiV1.json -k " + backUrl + "/v3/api-docs/apiV1");
-            Ut.cmd.run("bash -c 'npx --package typescript --package openapi-typescript openapi-typescript apiV1.json -o ../frontend/src/lib/backend/apiV1/schema.d.ts'");
-            Ut.cmd.run("bash -c 'rm -f apiV1.json'");
+
+            String downloadFilePath = Ut.file.downloadFileByHttp(backUrl + "/v3/api-docs/apiV1", ".");
+            Ut.file.moveFile(downloadFilePath, "apiV1.json");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("npx --package typescript --package openapi-typescript openapi-typescript apiV1.json -o ../frontend/src/lib/backend/apiV1/schema.d.ts");
+            sb.append(" && ");
+            sb.append("rm -f apiV1.json");
+
+            Ut.cmd.runAsync(sb.toString());
         };
     }
 }

@@ -6,6 +6,7 @@ import com.sapp.global.exceptions.GlobalException;
 import com.sapp.global.rsData.RsData;
 import com.sapp.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,9 +64,9 @@ public class MemberService {
 
     // 인증
     public record MemberAuthAndMakeTokensResBody(
-            Member member,
-            String accessToken,
-            String refreshToken
+            @NonNull Member member,
+            @NonNull String accessToken,
+            @NonNull String refreshToken
     ) {
     }
 

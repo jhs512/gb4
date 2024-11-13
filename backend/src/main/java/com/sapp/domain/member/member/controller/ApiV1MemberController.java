@@ -4,7 +4,7 @@ import com.sapp.domain.member.member.dto.MemberDto;
 import com.sapp.domain.member.member.service.MemberService;
 import com.sapp.global.rq.Rq;
 import com.sapp.global.rsData.RsData;
-import com.sapp.standard.base.Empty.Empty;
+import com.sapp.standard.base.Empty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

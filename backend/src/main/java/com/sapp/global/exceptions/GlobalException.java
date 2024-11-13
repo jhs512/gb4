@@ -1,7 +1,7 @@
 package com.sapp.global.exceptions;
 
 import com.sapp.global.rsData.RsData;
-import com.sapp.standard.base.Empty.Empty;
+import com.sapp.standard.base.Empty;
 import lombok.Getter;
 
 @Getter
