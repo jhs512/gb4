@@ -159,7 +159,7 @@ export interface components {
             social: boolean;
         };
         MemberLoginResBody: {
-            item?: components["schemas"]["MemberDto"];
+            item: components["schemas"]["MemberDto"];
         };
         RsDataMemberLoginResBody: {
             resultCode: string;
