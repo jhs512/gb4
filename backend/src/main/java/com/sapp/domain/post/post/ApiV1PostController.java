@@ -9,7 +9,7 @@ import com.sapp.global.rq.Rq;
 import com.sapp.global.rsData.RsData;
 import com.sapp.standard.base.Empty;
 import com.sapp.standard.base.KwTypeV1;
-import com.sapp.standard.base.PageDto;
+import com.sapp.standard.pagination.PageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

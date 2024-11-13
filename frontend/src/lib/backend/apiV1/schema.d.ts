@@ -169,15 +169,37 @@ export interface components {
             data: components["schemas"]["MemberLoginResBody"];
         };
         PageDtoPostDto: {
+            pageable: components["schemas"]["PageableDto"];
+            content: components["schemas"]["PostDto"][];
+        };
+        PageableDto: {
+            /** Format: int32 */
+            pageNumber: number;
+            /** Format: int32 */
+            pageSize: number;
+            sort: components["schemas"]["SortDto"];
             /** Format: int64 */
-            totalElementsCount: number;
+            offset: number;
+            paged: boolean;
+            unpaged: boolean;
+            last: boolean;
+            /** Format: int32 */
+            totalPages: number;
             /** Format: int64 */
-            pageElementsCount: number;
-            /** Format: int64 */
-            totalPagesCount: number;
+            totalElements: number;
+            /** Format: int32 */
+            size: number;
             /** Format: int32 */
             number: number;
-            content: components["schemas"]["PostDto"][];
+            first: boolean;
+            /** Format: int32 */
+            numberOfElements: number;
+            empty: boolean;
+        };
+        SortDto: {
+            empty: boolean;
+            sorted: boolean;
+            unsorted: boolean;
         };
         RsDataMemberDto: {
             resultCode: string;
