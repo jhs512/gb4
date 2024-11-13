@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import client from "@/lib/openapi_fetch";
-import { useLoginMember } from "@/stores/member";
+import { MemberContext, useLoginMember } from "@/stores/member";
 import { useEffect } from "react";
 
 export default function ClientLayout({
@@ -11,8 +11,21 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { setLoginMember, isLogin, loginMember, removeLoginMember } =
-    useLoginMember();
+  const {
+    setLoginMember,
+    isLogin,
+    loginMember,
+    removeLoginMember,
+    isLoginMemberPending,
+  } = useLoginMember();
+
+  const memberContextValue = {
+    loginMember,
+    setLoginMember,
+    removeLoginMember,
+    isLogin,
+    isLoginMemberPending,
+  };
 
   useEffect(() => {
     client.GET("/api/v1/members/me").then(({ data }) => {
@@ -49,7 +62,9 @@ export default function ClientLayout({
           </>
         )}
       </header>
-      <main className="flex-1">{children}</main>
+      <MemberContext.Provider value={memberContextValue}>
+        <main className="flex-1">{children}</main>
+      </MemberContext.Provider>
       <footer>- GB4 -</footer>
     </>
   );

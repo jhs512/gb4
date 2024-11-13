@@ -1,7 +1,22 @@
 import { components } from "@/lib/backend/apiV1/schema";
+import React from "react";
 import { useState } from "react";
 
 type Member = components["schemas"]["MemberDto"];
+
+export const MemberContext = React.createContext<{
+  loginMember: Member;
+  setLoginMember: (member: Member) => void;
+  removeLoginMember: () => void;
+  isLogin: boolean;
+  isLoginMemberPending: boolean;
+}>({
+  loginMember: createEmptyMember(),
+  setLoginMember: () => {},
+  removeLoginMember: () => {},
+  isLogin: false,
+  isLoginMemberPending: true,
+});
 
 function createEmptyMember(): Member {
   return {
