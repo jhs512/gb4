@@ -1,6 +1,7 @@
 "use client";
 
 import { components } from "@/lib/backend/apiV1/schema";
+import client from "@/lib/openapi_fetch";
 
 import { filterObjectKeys, getUrlParams } from "@/lib/utils";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
@@ -22,7 +23,17 @@ export default function ClientPage({
   const body = post.body || "";
   const viewer = false;
   const height = "500px";
-  const saveBody = () => {};
+  const saveBody = (editor: any) => {
+    client.PUT("/api/v1/posts/{id}", {
+      params: { path: { id } },
+      body: {
+        title: post.title,
+        body: editor.getMarkdown(),
+        published: post.published,
+        listed: post.listed,
+      },
+    });
+  };
 
   const loadEditor = async () => {
     const [
@@ -277,6 +288,23 @@ export default function ClientPage({
       viewer: viewer,
       ...editorConfig,
     });
+
+    editor.addCommand("markdown", "saveBody", () => {
+      saveBody(editor);
+
+      return true;
+    });
+
+    editor.insertToolbarItem(
+      { groupIndex: 0, itemIndex: 0 },
+      {
+        name: "saveBody",
+        tooltip: "저장(Ctrl + s, Cmd + s)",
+        className: "!text-[20px]",
+        text: "S",
+        command: "saveBody",
+      }
+    );
   };
 
   useEffect(() => {
